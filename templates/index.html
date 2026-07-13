@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalcMaster — Premium Calculus Workspace</title>
+  <meta name="description" content="Solve derivatives, integrals, limits, series, ODEs and vector calculus with step-by-step explanations, 2D/3D graphing, and cloud sync." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+
+  <!-- App Styles -->
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+
+  <!-- Ambient Background Blobs -->
+  <div class="blob-bg" aria-hidden="true">
+    <div class="blob blob-purple"></div>
+    <div class="blob blob-cyan"></div>
+    <div class="blob blob-violet"></div>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- ── SIDEBAR ─────────────────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">CalcMaster</span>
+          <span class="brand-version">v1.1 · CAS Engine</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" role="navigation" aria-label="Main Navigation">
+        <a href="#" class="nav-item active" data-tab="simple" id="nav-simple">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <line x1="9" y1="3" x2="9" y2="21"/>
+            <line x1="15" y1="3" x2="15" y2="21"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="3" y1="15" x2="21" y2="15"/>
+          </svg>
+          <span>Simple Calculator</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="calculator" id="nav-calculator">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h4"/></svg>
+          <span>Calculus Solver</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="grapher" id="nav-grapher">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span>2D / 3D Grapher</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="practice" id="nav-practice">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          <span>Practice Lab</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="formulas" id="nav-formulas">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Formula Sheets</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="history" id="nav-history">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"/></svg>
+          <span>History &amp; Sync</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer" id="sidebar-user-area">
+        <div class="sync-status-pill" id="sync-status-pill">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-label">Local Mode</span>
+        </div>
+        <button class="btn btn-ghost-sm w-full" id="sidebar-auth-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Sign In / Register
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── MAIN WORKSPACE ──────────────────────────────────────────── -->
+    <main class="workspace">
+
+      <!-- Top Header Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h2 id="page-title" class="page-title">Calculus Solver</h2>
+          <p id="page-desc" class="page-desc">Symbolic CAS Engine · Step-by-Step Solutions</p>
+        </div>
+        <div class="topbar-right">
+          <div class="engine-badge" id="engine-badge">
+            <span class="badge-dot"></span>
+            <span>SymPy Engine Online</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- TAB PANES -->
+      <div class="tab-wrapper">
+
+        <!-- ══ 0. SIMPLE CALCULATOR ════════════════════════════════════ -->
+        <section class="tab-pane active" id="tab-simple">
+          <div class="simple-calc-layout">
+            <div class="simple-calc-container glass">
+              <!-- Screen -->
+              <div class="simple-screen">
+                <div class="simple-expr" id="simple-expr"></div>
+                <div class="simple-val" id="simple-val">0</div>
+              </div>
+              <!-- Grid -->
+              <div class="simple-grid">
+                <button class="simple-btn btn-func" data-val="C">C</button>
+                <button class="simple-btn btn-func" data-val="()">( )</button>
+                <button class="simple-btn btn-func" data-val="%">%</button>
+                <button class="simple-btn btn-op" data-val="/">÷</button>
+
+                <button class="simple-btn" data-val="7">7</button>
+                <button class="simple-btn" data-val="8">8</button>
+                <button class="simple-btn" data-val="9">9</button>
+                <button class="simple-btn btn-op" data-val="*">×</button>
+
+                <button class="simple-btn" data-val="4">4</button>
+                <button class="simple-btn" data-val="5">5</button>
+                <button class="simple-btn" data-val="6">6</button>
+                <button class="simple-btn btn-op" data-val="-">−</button>
+
+                <button class="simple-btn" data-val="1">1</button>
+                <button class="simple-btn" data-val="2">2</button>
+                <button class="simple-btn" data-val="3">3</button>
+                <button class="simple-btn btn-op" data-val="+">+</button>
+
+                <button class="simple-btn" data-val="0">0</button>
+                <button class="simple-btn" data-val=".">.</button>
+                <button class="simple-btn btn-func" data-val="back">⌫</button>
+                <button class="simple-btn btn-eq" data-val="=">=</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ 1. CALCULATOR ═══════════════════════════════════════════ -->
+        <section class="tab-pane" id="tab-calculator">
+
+          <!-- Mode Selector -->
+          <div class="mode-bar" role="tablist" aria-label="Calculation Type">
+            <button class="mode-btn active" data-mode="derivative" role="tab" aria-selected="true">
+              <span class="mode-sym">f′</span><span>Derivative</span>
+            </button>
+            <button class="mode-btn" data-mode="integral" role="tab">
+              <span class="mode-sym">∫</span><span>Integral</span>
+            </button>
+            <button class="mode-btn" data-mode="limit" role="tab">
+              <span class="mode-sym">lim</span><span>Limit</span>
+            </button>
+            <button class="mode-btn" data-mode="series" role="tab">
+              <span class="mode-sym">Σ</span><span>Series</span>
+            </button>
+            <button class="mode-btn" data-mode="ode" role="tab">
+              <span class="mode-sym">y″</span><span>ODE</span>
+            </button>
+            <button class="mode-btn" data-mode="vector_calc" role="tab">
+              <span class="mode-sym">∇</span><span>Vector</span>
+            </button>
+          </div>
+
+          <!-- Calculator grid: input | output -->
+          <div class="calc-layout">
+
+            <!-- Left: Input Panel -->
+            <div class="input-panel glass">
+              <label class="field-label" for="math-input">Expression</label>
+              <div class="input-row">
+                <div class="input-wrap" id="input-wrap">
+                  <svg class="inp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                  <input type="text" id="math-input" class="math-input" placeholder="e.g.  x^2 * sin(x)" autocomplete="off" spellcheck="false" />
+                  <button class="clear-x" id="btn-clear" title="Clear" aria-label="Clear input">✕</button>
+                </div>
+              </div>
+
+              <!-- Live KaTeX preview -->
+              <div class="preview-box">
+                <span class="preview-tag">Preview</span>
+                <div id="katex-preview" class="katex-live">&#8203;</div>
+              </div>
+
+              <!-- Symbol Palette -->
+              <div class="palette" aria-label="Math symbol palette">
+                <button class="pal" data-ins="x">x</button>
+                <button class="pal" data-ins="y">y</button>
+                <button class="pal" data-ins="t">t</button>
+                <button class="pal" data-ins="^2">x²</button>
+                <button class="pal" data-ins="^(">xⁿ</button>
+                <button class="pal" data-ins="sqrt(">√</button>
+                <button class="pal" data-ins="pi">π</button>
+                <button class="pal" data-ins="E">e</button>
+                <button class="pal" data-ins="oo">∞</button>
+                <button class="pal" data-ins="sin(">sin</button>
+                <button class="pal" data-ins="cos(">cos</button>
+                <button class="pal" data-ins="tan(">tan</button>
+                <button class="pal" data-ins="ln(">ln</button>
+                <button class="pal" data-ins="log(">log</button>
+                <button class="pal" data-ins="exp(">eˣ</button>
+                <button class="pal" data-ins="asin(">sin⁻¹</button>
+                <button class="pal" data-ins="acos(">cos⁻¹</button>
+                <button class="pal" data-ins="atan(">tan⁻¹</button>
+                <button class="pal" data-ins="abs(">|x|</button>
+                <button class="pal" data-ins="*">×</button>
+              </div>
+
+              <!-- Options Area (dynamic) -->
+              <div class="options-wrap">
+                <div class="option-group">
+                  <label class="field-label-sm" for="opt-var">Variable</label>
+                  <select class="sel" id="opt-var">
+                    <option value="x" selected>x</option>
+                    <option value="y">y</option>
+                    <option value="z">z</option>
+                    <option value="t">t</option>
+                    <option value="n">n</option>
+                  </select>
+                </div>
+                <div id="dynamic-opts" class="dynamic-opts"></div>
+              </div>
+
+              <!-- Solve Button -->
+              <button class="btn btn-solve" id="btn-solve">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Calculate Solution
+              </button>
+            </div>
+
+            <!-- Right: Output Panel -->
+            <div class="output-panel" id="output-panel">
+
+              <!-- Empty state -->
+              <div class="empty-state" id="empty-state">
+                <div class="empty-icon">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                </div>
+                <h3>Ready to Solve</h3>
+                <p>Enter an expression, select a calculation type, and hit <strong>Calculate Solution</strong>.</p>
+              </div>
+
+              <!-- Loading -->
+              <div class="loading-state hidden" id="loading-state">
+                <div class="spinner"></div>
+                <p>Running SymPy CAS Engine…</p>
+              </div>
+
+              <!-- Results -->
+              <div class="results hidden" id="results">
+
+                <!-- Answer Card -->
+                <div class="glass result-card" id="answer-card">
+                  <div class="result-header">
+                    <span class="chip chip-teal">Answer</span>
+                    <div class="result-actions">
+                      <button class="icon-btn" id="btn-copy-latex" title="Copy LaTeX">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      </button>
+                      <button class="icon-btn" id="btn-save-calc" title="Save to history">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div id="result-latex" class="result-math"></div>
+                  <div id="result-numeric" class="result-numeric hidden"></div>
+                </div>
+
+                <!-- Graph Card -->
+                <div class="glass result-card" id="graph-card">
+                  <div class="result-header">
+                    <span class="chip chip-indigo">Graph</span>
+                    <span class="chip chip-dark">Interactive · Plotly</span>
+                  </div>
+                  <div id="result-plot" class="plot-container"></div>
+                </div>
+
+                <!-- Steps Card -->
+                <div class="glass result-card" id="steps-card">
+                  <div class="result-header">
+                    <span class="chip chip-violet">Step-by-Step</span>
+                    <button class="btn btn-xs btn-ghost" id="btn-expand-all">Expand All</button>
+                  </div>
+                  <div id="steps-container" class="steps-list"></div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ 2. GRAPHER ═══════════════════════════════════════════════ -->
+        <section class="tab-pane" id="tab-grapher">
+          <div class="grapher-layout">
+            <div class="glass grapher-controls">
+              <h3 class="panel-title">Plot Configuration</h3>
+
+              <div class="option-group">
+                <label class="field-label-sm">Dimension</label>
+                <select class="sel" id="g-dim">
+                  <option value="2" selected>2D  —  y = f(x)</option>
+                  <option value="3">3D  —  z = f(x, y)</option>
+                </select>
+              </div>
+
+              <div class="option-group">
+                <label class="field-label-sm" for="g-expr">Function</label>
+                <input type="text" class="math-input" id="g-expr" value="sin(x) * exp(-x/4)" placeholder="e.g. x^2 - y^2" />
+              </div>
+
+              <div class="bounds-grid">
+                <div class="option-group">
+                  <label class="field-label-sm">x min</label>
+                  <input type="number" class="num-inp" id="g-xmin" value="-10" />
+                </div>
+                <div class="option-group">
+                  <label class="field-label-sm">x max</label>
+                  <input type="number" class="num-inp" id="g-xmax" value="10" />
+                </div>
+                <div class="option-group graph-3d-only hidden">
+                  <label class="field-label-sm">y min</label>
+                  <input type="number" class="num-inp" id="g-ymin" value="-5" />
+                </div>
+                <div class="option-group graph-3d-only hidden">
+                  <label class="field-label-sm">y max</label>
+                  <input type="number" class="num-inp" id="g-ymax" value="5" />
+                </div>
+              </div>
+
+              <button class="btn btn-solve w-full" id="btn-plot">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Render Plot
+              </button>
+            </div>
+
+            <div class="glass grapher-canvas">
+              <div id="fullscreen-plot" class="plot-container plot-large"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ 3. PRACTICE LAB ═════════════════════════════════════════ -->
+        <section class="tab-pane" id="tab-practice">
+          <div class="practice-layout">
+
+            <div class="glass practice-sidebar-panel">
+              <h3 class="panel-title">Generate Problem</h3>
+              <p class="muted-text">Select difficulty and topic to get a graded practice problem with hints and step-by-step reveals.</p>
+              <div class="option-group">
+                <label class="field-label-sm">Category</label>
+                <select class="sel" id="p-type">
+                  <option value="">Any Category</option>
+                  <option value="derivative">Derivatives</option>
+                  <option value="integral">Integrals</option>
+                  <option value="limit">Limits</option>
+                  <option value="series">Series</option>
+                  <option value="ode">ODE</option>
+                </select>
+              </div>
+              <div class="option-group">
+                <label class="field-label-sm">Difficulty</label>
+                <select class="sel" id="p-diff">
+                  <option value="">Any Difficulty</option>
+                  <option value="Easy">Easy</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Hard">Hard</option>
+                </select>
+              </div>
+              <button class="btn btn-solve w-full" id="btn-gen-problem">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.36"/></svg>
+                Generate Problem
+              </button>
+            </div>
+
+            <div class="practice-main" id="practice-main">
+              <div class="empty-state">
+                <div class="empty-icon">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                </div>
+                <h3>Practice Mode</h3>
+                <p>Click <strong>Generate Problem</strong> to start a guided calculus session.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ 4. FORMULA SHEETS ════════════════════════════════════════ -->
+        <section class="tab-pane" id="tab-formulas">
+          <div class="formulas-search-row">
+            <div class="input-wrap" style="max-width:340px">
+              <svg class="inp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="formula-search" class="math-input" placeholder="Search formulas…" />
+            </div>
+          </div>
+          <div class="formulas-grid" id="formulas-grid"></div>
+        </section>
+
+        <!-- ══ 5. HISTORY & SYNC ════════════════════════════════════════ -->
+        <section class="tab-pane" id="tab-history">
+          <div class="history-layout">
+
+            <!-- Auth Panel -->
+            <div class="glass auth-panel">
+              <!-- Signed-OUT view -->
+              <div id="auth-out-view">
+                <div class="auth-tabs">
+                  <button class="auth-tab-btn active" id="tab-btn-login" type="button">Log In</button>
+                  <button class="auth-tab-btn" id="tab-btn-signup" type="button">Sign Up</button>
+                </div>
+                <form id="auth-form" autocomplete="on">
+                  <input type="hidden" id="auth-mode" value="login" />
+                  
+                  <div class="option-group hidden" id="group-username">
+                    <label class="field-label-sm" for="auth-username">Username</label>
+                    <input type="text" id="auth-username" class="text-inp" placeholder="e.g. math_genius" />
+                  </div>
+                  
+                  <div class="option-group">
+                    <label class="field-label-sm" for="auth-email">Email</label>
+                    <input type="email" id="auth-email" class="text-inp" placeholder="you@example.com" required />
+                  </div>
+                  
+                  <div class="option-group">
+                    <label class="field-label-sm" for="auth-pass">Password</label>
+                    <div class="pass-input-wrap">
+                      <input type="password" id="auth-pass" class="text-inp" placeholder="••••••••••" required />
+                      <button class="pass-toggle" id="btn-toggle-pass" type="button" title="Toggle password visibility">
+                        <svg class="eye-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-solve w-full" style="margin-top:12px" id="btn-auth">
+                    Log In
+                  </button>
+                </form>
+                <div class="auth-error hidden" id="auth-error"></div>
+              </div>
+
+              <!-- Signed-IN view -->
+              <div id="auth-in-view" class="hidden">
+                <div class="user-card">
+                  <div class="avatar-ring">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </div>
+                  <div>
+                    <p class="user-name" id="user-name">User</p>
+                    <p class="user-email" id="user-email"></p>
+                  </div>
+                </div>
+                <div class="stats-row">
+                  <div class="stat-card">
+                    <h4 id="stat-count">0</h4><p>Calculations</p>
+                  </div>
+                  <div class="stat-card">
+                    <h4 id="stat-streak">1</h4><p>Day Streak</p>
+                  </div>
+                </div>
+                <button class="btn btn-ghost-sm w-full" id="btn-logout">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  Log Out
+                </button>
+              </div>
+            </div>
+
+            <!-- History Log -->
+            <div class="glass history-log">
+              <div class="log-header">
+                <h3 class="panel-title">Calculation History</h3>
+                <button class="btn btn-xs btn-ghost danger" id="btn-clear-history">Clear All</button>
+              </div>
+              <div id="history-list" class="history-list">
+                <p class="muted-text" style="text-align:center;padding:40px 0">No history yet. Solve a problem to see it here.</p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div><!-- /tab-wrapper -->
+    </main>
+  </div><!-- /app-shell -->
+
+  <!-- ── SCRIPTS ──────────────────────────────────────────────────── -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/static/js/supabase-config.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
