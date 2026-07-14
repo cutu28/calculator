@@ -1101,3 +1101,279 @@ input, select, textarea { font-family: inherit; }
 
 /* ── Shared helpers ──────────────────────────────────────────────── */
 .hidden { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   CalcMaster — v1.2 · Enhanced Animations & Micro-interactions
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Custom cursor glow ──────────────────────────────────────────── */
+#cursor-glow {
+  position: fixed;
+  width: 340px; height: 340px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle, rgba(124,58,237,0.07) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: opacity .4s ease;
+  mix-blend-mode: screen;
+}
+
+/* ── Nav item hover — slide-in glow bar ─────────────────────────── */
+.nav-item {
+  position: relative;
+  overflow: hidden;
+}
+.nav-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(124,58,237,0.08) 0%, transparent 80%);
+  transform: translateX(-100%);
+  transition: transform .28s var(--ease);
+  border-radius: var(--radius-sm);
+}
+.nav-item:hover::after { transform: translateX(0); }
+.nav-item:hover .nav-icon {
+  color: var(--purple);
+  filter: drop-shadow(0 0 4px var(--purple));
+  transform: scale(1.15);
+  transition: all .22s var(--ease);
+}
+.nav-icon { transition: all .22s var(--ease); }
+
+/* ── Glass card hover — shimmer sweep ───────────────────────────── */
+.glass {
+  position: relative;
+  overflow: hidden;
+}
+.glass::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,0.04) 50%,
+    transparent 60%
+  );
+  transition: left .55s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+.glass:hover::before { left: 160%; }
+
+/* ── Result card — lift on hover ─────────────────────────────────── */
+.result-card {
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease) !important;
+}
+.result-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+
+/* ── Mode buttons — pop scale + glow on hover ────────────────────── */
+.mode-btn {
+  position: relative;
+  overflow: hidden;
+}
+.mode-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(124,58,237,0.18) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.mode-btn:hover::before { opacity: 1; }
+.mode-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  border-color: rgba(124,58,237,0.4);
+  box-shadow: 0 6px 20px rgba(124,58,237,0.15);
+}
+.mode-btn:hover .mode-sym {
+  color: var(--purple);
+  text-shadow: 0 0 14px var(--purple-glow);
+  transform: scale(1.12);
+}
+
+/* ── Palette buttons — bounce + glow ────────────────────────────── */
+.pal:hover {
+  transform: scale(1.12) translateY(-2px);
+  box-shadow: 0 4px 16px var(--purple-glow);
+}
+.pal:active { transform: scale(0.95); }
+
+/* ── Solve button — animated gradient shift ──────────────────────── */
+.btn-solve {
+  background-size: 200% 200%;
+  background-image: linear-gradient(135deg, var(--purple) 0%, #6366f1 50%, var(--cyan) 100%);
+  transition: all .3s var(--ease);
+}
+.btn-solve:hover {
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(124,58,237,0.45);
+  letter-spacing: 0.3px;
+}
+.btn-solve:active { transform: translateY(0); }
+
+/* ── Ripple effect on buttons ────────────────────────────────────── */
+.ripple-host { position: relative; overflow: hidden; }
+@keyframes ripple-expand {
+  to { transform: scale(4); opacity: 0; }
+}
+.ripple-wave {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  transform: scale(0);
+  animation: ripple-expand .55s linear;
+  pointer-events: none;
+}
+
+/* ── Simple calc buttons — glow ring on hover ────────────────────── */
+.simple-btn:hover {
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.08), 0 4px 18px rgba(0,0,0,0.3);
+}
+.btn-eq:hover {
+  box-shadow: 0 0 16px rgba(124,58,237,0.6), 0 6px 20px rgba(124,58,237,0.45);
+}
+
+/* ── History row — slide-right reveal ───────────────────────────── */
+.history-row {
+  transition: background .2s, transform .2s var(--ease), padding-left .2s var(--ease);
+  border-radius: 6px;
+}
+.history-row:hover {
+  background: rgba(124,58,237,0.06) !important;
+  padding-left: 10px;
+  border-left: 2px solid rgba(124,58,237,0.35);
+}
+
+/* ── Formula table rows — highlight ─────────────────────────────── */
+.formula-table tr {
+  transition: background .15s ease;
+}
+.formula-table tr:hover {
+  background: rgba(124,58,237,0.05);
+  border-radius: 4px;
+}
+.formula-table tr:hover td:first-child {
+  color: var(--text);
+}
+
+/* ── Brand icon — spin on hover ──────────────────────────────────── */
+.brand-icon {
+  transition: transform .5s var(--ease), box-shadow .3s;
+}
+.brand-icon:hover {
+  transform: rotate(20deg) scale(1.08);
+  box-shadow: 0 0 30px var(--purple-glow), 0 0 60px rgba(6,182,212,0.2);
+}
+
+/* ── Chip badges — subtle bounce ─────────────────────────────────── */
+.chip {
+  transition: transform .18s var(--ease), box-shadow .18s;
+  display: inline-block;
+}
+.chip:hover {
+  transform: translateY(-1px) scale(1.05);
+}
+
+/* ── Input focus — animated border glow ─────────────────────────── */
+.text-inp, .sel, .num-inp {
+  transition: border-color .22s, box-shadow .22s, transform .15s;
+}
+.text-inp:focus, .sel:focus, .num-inp:focus {
+  transform: scale(1.01);
+}
+
+/* ── Step headers — color shift ──────────────────────────────────── */
+.step-header {
+  transition: background .2s, color .2s, padding-left .2s;
+}
+.step-header:hover {
+  padding-left: 24px;
+  color: var(--text);
+}
+.step-node.open .step-header {
+  background: rgba(124,58,237,0.08);
+  border-bottom-color: rgba(124,58,237,0.2);
+}
+
+/* ── Page title — gradient on hover ──────────────────────────────── */
+.page-title {
+  transition: all .3s ease;
+  cursor: default;
+}
+.page-title:hover {
+  background: linear-gradient(90deg, #fff 0%, var(--purple) 60%, var(--cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Stat cards — glow on hover ──────────────────────────────────── */
+.stat-card {
+  transition: transform .22s var(--ease), box-shadow .22s, border-color .22s;
+}
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(124,58,237,0.3);
+  box-shadow: 0 8px 24px rgba(124,58,237,0.12);
+}
+.stat-card:hover h4 {
+  text-shadow: 0 0 20px var(--purple-glow);
+}
+.stat-card h4 { transition: text-shadow .22s; }
+
+/* ── Auth panel tabs — animated underline ────────────────────────── */
+.auth-tab-btn {
+  position: relative;
+  overflow: hidden;
+}
+.auth-tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  width: 0; height: 2px;
+  background: var(--purple);
+  transition: width .25s ease, left .25s ease;
+}
+.auth-tab-btn:hover::after {
+  width: 60%;
+  left: 20%;
+}
+
+/* ── Scroll fade-in for section content ──────────────────────────── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.tab-pane.active > * {
+  animation: fadeSlideUp .32s var(--ease) both;
+}
+
+/* ── Watermark ───────────────────────────────────────────────────── */
+#watermark {
+  position: fixed;
+  bottom: 14px;
+  right: 18px;
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.13);
+  letter-spacing: 0.5px;
+  font-family: 'Outfit', sans-serif;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+  transition: color .3s, text-shadow .3s;
+}
+#watermark:hover {
+  color: rgba(255,255,255,0.35);
+  text-shadow: 0 0 10px rgba(124,58,237,0.4);
+  pointer-events: auto;
+}
+

@@ -19,7 +19,13 @@
 </head>
 <body>
 
-  <!-- Ambient Background Blobs -->
+  <!-- Cursor glow -->
+  <div id="cursor-glow" aria-hidden="true"></div>
+
+  <!-- Watermark -->
+  <div id="watermark">made by sahil garg</div>
+
+
   <div class="blob-bg" aria-hidden="true">
     <div class="blob blob-purple"></div>
     <div class="blob blob-cyan"></div>
@@ -502,5 +508,66 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/static/js/supabase-config.js"></script>
   <script src="/static/js/app.js"></script>
+
+  <!-- ── Micro-interaction scripts ── -->
+  <script>
+  (function () {
+    'use strict';
+
+    /* 1. Cursor glow follow */
+    const glow = document.getElementById('cursor-glow');
+    if (glow) {
+      let tx = 0, ty = 0, cx = 0, cy = 0;
+      document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+      (function animGlow() {
+        cx += (tx - cx) * 0.10;
+        cy += (ty - cy) * 0.10;
+        glow.style.left = cx + 'px';
+        glow.style.top  = cy + 'px';
+        requestAnimationFrame(animGlow);
+      })();
+    }
+
+    /* 2. Ripple effect on every button */
+    function addRipple(el) {
+      el.classList.add('ripple-host');
+      el.addEventListener('click', function (e) {
+        const r = el.getBoundingClientRect();
+        const size = Math.max(r.width, r.height);
+        const x = e.clientX - r.left - size / 2;
+        const y = e.clientY - r.top  - size / 2;
+        const wave = document.createElement('span');
+        wave.className = 'ripple-wave';
+        wave.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px`;
+        el.appendChild(wave);
+        wave.addEventListener('animationend', () => wave.remove());
+      });
+    }
+    document.querySelectorAll('button, .nav-item').forEach(addRipple);
+
+    /* 3. Observe new buttons added dynamically (mode option selects) */
+    const observer = new MutationObserver(muts => {
+      muts.forEach(m => m.addedNodes.forEach(n => {
+        if (n.nodeType !== 1) return;
+        n.querySelectorAll && n.querySelectorAll('button').forEach(addRipple);
+        if (n.tagName === 'BUTTON') addRipple(n);
+      }));
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    /* 4. Brand icon easter egg — spin on click */
+    const brandIcon = document.querySelector('.brand-icon');
+    if (brandIcon) {
+      brandIcon.style.cursor = 'pointer';
+      brandIcon.addEventListener('click', () => {
+        brandIcon.style.transition = 'transform .6s cubic-bezier(.34,1.56,.64,1)';
+        brandIcon.style.transform = 'rotate(360deg) scale(1.15)';
+        setTimeout(() => {
+          brandIcon.style.transform = '';
+        }, 650);
+      });
+    }
+  })();
+  </script>
 </body>
 </html>
