@@ -479,6 +479,11 @@
                 <h3 class="panel-title">Calculation History</h3>
                 <button class="btn btn-xs btn-ghost danger" id="btn-clear-history">Clear All</button>
               </div>
+              <!-- Cross-device sync notice -->
+              <div id="sync-notice" style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;margin:0 0 10px 0;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.18);border-radius:10px;font-size:0.78rem;color:#a5b4fc;line-height:1.5;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>History is saved to your browser on this device. <strong style="color:#c7d2fe">Log in above</strong> to sync calculations across all devices and deployments (Render, local, etc.).</span>
+              </div>
               <div id="history-list" class="history-list">
                 <p class="muted-text" style="text-align:center;padding:40px 0">No history yet. Solve a problem to see it here.</p>
               </div>

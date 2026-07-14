@@ -464,7 +464,7 @@ async function solve() {
   }
 }
 
-function renderResults(res, expr, body) {
+function renderResults(res, expr, body, fromHistory) {
   showState('results');
 
   // Answer card
@@ -482,14 +482,21 @@ function renderResults(res, expr, body) {
   }
 
   // Store data on buttons
-  document.getElementById('btn-copy-latex').dataset.latex = res.result_latex;
-  document.getElementById('btn-save-calc').dataset.payload = JSON.stringify({
+  const payload = {
     title:        `${calcMode.toUpperCase()}: ${expr}`,
     expression:    expr,
     calc_type:     calcMode,
     result_latex:  res.result_latex,
-    steps_json:    res.steps,
-  });
+    steps_json:    res.steps || res.steps_json || [],
+  };
+  document.getElementById('btn-copy-latex').dataset.latex = res.result_latex;
+  document.getElementById('btn-save-calc').dataset.payload = JSON.stringify(payload);
+
+  // Auto-save to history on fresh solve (not when replaying from history)
+  if (!fromHistory && expr) {
+    SyncDB.saveCalculation(payload).then(() => loadHistory());
+    flashSaveBtn();
+  }
 
   // Steps
   const stepsEl = document.getElementById('steps-container');
@@ -997,6 +1004,7 @@ async function checkAndShowUser() {
   const pill    = document.getElementById('sync-status-pill');
   const dot     = document.getElementById('status-dot');
   const label   = document.getElementById('status-label');
+  const notice  = document.getElementById('sync-notice');
 
   if (user) {
     outView.classList.add('hidden');
@@ -1009,6 +1017,7 @@ async function checkAndShowUser() {
     label.textContent      = 'Cloud Synced';
     label.style.color      = '#06b6d4';
     pill.style.borderColor = 'rgba(6,182,212,.25)';
+    if (notice) notice.style.display = 'none';
   } else {
     outView.classList.remove('hidden');
     inView.classList.add('hidden');
@@ -1017,6 +1026,7 @@ async function checkAndShowUser() {
     label.textContent      = 'Local Mode';
     label.style.color      = '#10b981';
     pill.style.borderColor = 'rgba(16,185,129,.25)';
+    if (notice) notice.style.display = 'flex';
   }
 }
 
@@ -1065,11 +1075,12 @@ async function loadHistory() {
         });
         document.getElementById('math-input').value = item.expression || '';
         updatePreview();
+        // Pass fromHistory=true to prevent duplicate save; normalize steps field
         renderResults({
           success: true,
           result_latex: item.result_latex,
-          steps: item.steps_json,
-        }, item.expression, {});
+          steps: item.steps_json || [],
+        }, item.expression, {}, /* fromHistory */ true);
       }
     });
 
@@ -1158,4 +1169,15 @@ function flashBtn(id, msg) {
   const orig = btn.title;
   btn.title = msg;
   setTimeout(() => btn.title = orig, 1800);
+}
+
+function flashSaveBtn() {
+  const btn = document.getElementById('btn-save-calc');
+  if (!btn) return;
+  btn.style.color = '#10b981';
+  btn.title = '✓ Auto-saved';
+  setTimeout(() => {
+    btn.style.color = '';
+    btn.title = 'Save to history';
+  }, 2000);
 }
