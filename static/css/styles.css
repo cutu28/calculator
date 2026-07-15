@@ -1101,3 +1101,99 @@ input, select, textarea { font-family: inherit; }
 
 /* ── Shared helpers ──────────────────────────────────────────────── */
 .hidden { display: none !important; }
+
+/* ── Developer Watermark ─────────────────────────────────────────── */
+.floating-watermark {
+  position: fixed;
+  bottom: 20px;
+  right: 24px;
+  z-index: 9999;
+  background: rgba(11, 13, 23, 0.6);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 16px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.floating-watermark:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: rgba(124, 58, 237, 0.4);
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.watermark-dot {
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(135deg, var(--purple) 0%, var(--cyan) 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--purple);
+}
+
+.watermark-content {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.watermark-name {
+  background: linear-gradient(90deg, #c084fc 0%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+/* Sidebar Watermark */
+.sidebar-watermark {
+  margin-top: 12px;
+  padding: 10px 8px 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+
+.sidebar-watermark-heart {
+  color: var(--red);
+  animation: watermark-heartbeat 1.6s infinite;
+  display: inline-block;
+}
+
+@keyframes watermark-heartbeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.15); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.15); }
+  70% { transform: scale(1); }
+}
+
+.sidebar-watermark-dev {
+  color: var(--text-2);
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .floating-watermark {
+    bottom: 12px;
+    right: 12px;
+    padding: 6px 12px;
+  }
+}
